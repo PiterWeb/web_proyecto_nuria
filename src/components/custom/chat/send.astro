@@ -1,0 +1,37 @@
+<!-- Create a modern text area with a send button to post a message (tailwind)  -->
+<div
+  class="flex flex-row items-center w-full h-16 px-5 py-2 bg-white border-t border-gray-200">
+  <div class="flex-grow ml-4">
+    <div class="flex flex-col md:flex-row gap-2 w-full">
+      <textarea
+        id="message"
+        name="message"
+        placeholder="Type your message here..."
+        class="flex w-full h-10 px-4 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline resize-none overflow-hidden"
+      ></textarea>
+      <button
+        type="submit"
+        class="px-4 py-2 font-bold text-white bg-black rounded-lg hover:bg-gray-800"
+        >Send</button
+      >
+    </div>
+  </div>
+</div>
+
+<script>
+  const message = document.getElementById("message");
+
+  message?.addEventListener("keyup", textAreaAdjust);
+
+  function textAreaAdjust(o) {
+    if (!message) return;
+
+    if (25 + message.scrollHeight >= 120) {
+        return
+    }
+
+    message.style.height = "1px";
+    message.style.height = 25 + message.scrollHeight + "px";
+    
+  }
+</script>

@@ -1,0 +1,30 @@
+---
+import Container from "@components/container.astro";
+import Layout from "@layouts/Layout.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Send from "@components/custom/chat/send.astro";
+import ChatHandler from "@components/custom/chat/chathandler.svelte";
+
+---
+
+<Layout title="Espacio Personal">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Espacio Personal</Fragment>
+      <Fragment slot="desc">
+        <p>
+          Este es un lugar donde te puedes desahogar sobre los problemas que no
+          te dejan dormir
+        </p>
+      </Fragment>
+    </Sectionhead>
+    <main class="mt-16">
+      <div class="grid gap-16 max-w-4xl mx-auto">
+        <Send />
+
+        <ChatHandler client:load />
+
+      </div>
+    </main>
+  </Container>
+</Layout>

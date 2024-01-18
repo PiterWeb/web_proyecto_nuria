@@ -1,0 +1,21 @@
+---
+import Authform from "@components/custom/auth/authform.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Layout from "@layouts/Layout.astro";
+---
+
+<Layout title="Contact">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Iniciar sesión</Fragment>
+      <Fragment slot="desc">Inicia sesión en tu cuenta</Fragment>
+    </Sectionhead>
+
+    <div class="grid md:grid-cols-1 mx-auto max-w-lg mt-16">
+      <div>
+        <Authform action="login"/>
+      </div>
+    </div>
+  </Container>
+</Layout>

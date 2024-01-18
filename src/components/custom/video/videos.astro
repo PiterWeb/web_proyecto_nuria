@@ -1,0 +1,49 @@
+---
+const videos = [
+  {
+    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
+  },
+  {
+    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
+  },
+  {
+    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
+  },
+  {
+    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
+  },
+  {
+    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
+  },
+  {
+    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
+  },
+];
+---
+
+<div class="mt-16">
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    Videos relacionados
+  </h2>
+  <p class="text-lg mt-4 text-slate-600">
+    Mantente al día con las últimas noticias sobre psicología y nutrición.
+  </p>
+</div>
+
+<div class="grid sm:grid-cols-2 md:grid-cols-2 mt-16 gap-16">
+  {
+    videos.map((item) => (
+      <div class="rounded-lg overflow-hidden">
+        <iframe
+          width="560"
+          height="315"
+          src={item.url}
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        />
+      </div>
+    ))
+  }
+</div>
