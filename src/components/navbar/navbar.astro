@@ -1,7 +1,6 @@
 ---
 import Container from "@components/container.astro";
 import Link from "@components/ui/link.astro";
-import Dropdown from "./dropdown.astro";
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 
 const menuitems = [
@@ -9,7 +8,6 @@ const menuitems = [
     title: "Espacio Personal",
     path: "/espacio-personal",
   },
-
 ];
 ---
 
@@ -37,7 +35,6 @@ const menuitems = [
                       href={item.path}
                       class="flex lg:px-3 py-2 items-center text-gray-600 hover:text-gray-900">
                       <span> {item.title}</span>
-                      
                     </a>
                   </li>
                 }
@@ -45,17 +42,54 @@ const menuitems = [
             ))
           }
         </ul>
-        <div class="lg:hidden flex items-center mt-3 gap-4">
-          <Link href="/auth/login" style="muted" block size="md">Inicia sesión</Link>
+        <div class="auth lg:hidden invisible flex items-center mt-3 gap-4">
+          <Link href="/auth/login" style="muted" block size="md">
+            Inicia sesión
+          </Link>
           <Link href="/auth/register" size="md" block>Registrarse</Link>
         </div>
       </MenuItems>
     </Astronav>
     <div>
-      <div class="hidden lg:flex items-center gap-4">
+      <div class="auth hidden invisible lg:flex items-center gap-4">
         <a href="/auth/login">Inicia sesión</a>
         <Link href="/auth/register" size="md">Registrarse</Link>
       </div>
     </div>
   </header>
 </Container>
+
+<script>
+  import { getActiveSession, logout } from "@utils/appwrite";
+
+  const authElements = document.querySelectorAll(".auth");
+
+  getActiveSession()
+    .then((session) => {
+      if (!session) return;
+
+      for (const authEl of authElements) {
+        authEl.innerHTML = `
+      <span class="text-gray-600">Hola, ${session.name}</span>
+      <button id="logout" class="border border-solid lg:p-4 p-2">
+          Cerrar sesión
+        </button>
+    `;
+      }
+
+      const logoutButton = document.getElementById("logout");
+
+      logoutButton?.addEventListener("click", () => {
+        console.log("logout");
+        logout().then(() => window.location.reload());
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      for (const authEl of authElements) {
+        authEl.classList.remove("invisible");
+      }
+    });
+</script>

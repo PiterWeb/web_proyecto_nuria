@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query, Account } from "appwrite";
+import { Client, Databases, ID, Query, Account, Role } from "appwrite";
 
 const client = new Client();
 
@@ -7,17 +7,21 @@ client.setEndpoint("https://cloud.appwrite.io/v1").setProject("psiconutricion");
 const databases = new Databases(client);
 const account = new Account(client);
 
-export function sendToChat(message) {
+export async function sendToChat(message) {
+
+  const user = await account.get();
+
+  // if (!user.emailVerification) return
+
   return databases.createDocument("chat", "messages", ID.unique(), {
     text: message,
-    createdAt: Date.now(),
-    username: "Anonymous",
+    username: user.name,
   });
 }
 
 export function getChat() {
   return databases.listDocuments("chat", "messages", [
-    Query.orderDesc("createdAt"),
+    Query.orderDesc("$createdAt"),
     Query.limit(25),
   ]);
 }
@@ -37,10 +41,17 @@ export function getVideos() {
 }
 
 export function createAccount(email, password, name) {
-  return account.create(ID.unique(), email, password, name);
+  return account.create(name, email, password, name);
 }
 
 export function login(email, password) {
   return account.createEmailSession(email, password);
 }
 
+export function logout() {
+  return account.deleteSession("current");
+}
+
+export function getActiveSession() {
+  return account.get()
+}

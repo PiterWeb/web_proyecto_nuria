@@ -1,24 +1,7 @@
 ---
-const videos = [
-  {
-    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
-  },
-  {
-    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
-  },
-  {
-    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
-  },
-  {
-    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
-  },
-  {
-    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
-  },
-  {
-    url: "https://www.youtube-nocookie.com/embed/NhzcqZkacao?si=DMZXvQkoLEKPlP-6",
-  },
-];
+import { getVideos } from "@utils/appwrite";
+
+const videos = await getVideos();
 ---
 
 <div class="mt-16">
@@ -32,7 +15,7 @@ const videos = [
 
 <div class="grid sm:grid-cols-2 md:grid-cols-2 mt-16 gap-16">
   {
-    videos.map((item) => (
+    videos.documents.map((item) => (
       <div class="rounded-lg overflow-hidden">
         <iframe
           width="560"

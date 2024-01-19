@@ -15,7 +15,7 @@
   {#each chat.documents as doc}
     <ChatBubble
       username={doc.username}
-      timestamp={doc.createdAt}
+      timestamp={doc.$createdAt}
       content={doc.text} />
   {/each}
 {:catch error}

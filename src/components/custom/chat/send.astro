@@ -6,32 +6,56 @@
       <textarea
         id="message"
         name="message"
-        placeholder="Type your message here..."
+        placeholder="Cuenta tus experiencias, dudas, etc"
         class="flex w-full h-10 px-4 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline resize-none overflow-hidden"
       ></textarea>
       <button
         type="submit"
+        id="send"
         class="px-4 py-2 font-bold text-white bg-black rounded-lg hover:bg-gray-800"
-        >Send</button
+        >Publicar</button
       >
     </div>
   </div>
 </div>
 
 <script>
+  import { sendToChat } from "@utils/appwrite";
+
   const message = document.getElementById("message");
 
   message?.addEventListener("keyup", textAreaAdjust);
 
-  function textAreaAdjust(o) {
+  function textAreaAdjust(_) {
     if (!message) return;
 
     if (25 + message.scrollHeight >= 120) {
-        return
+      return;
     }
 
     message.style.height = "1px";
     message.style.height = 25 + message.scrollHeight + "px";
-    
   }
+
+  const sendButton = document.getElementById("send");
+
+  sendButton?.addEventListener("click", () => {
+    if (!message) return;
+
+    // @ts-ignore
+    const messageValue = message.value;
+
+    if (messageValue.trim() === "") return;
+
+    sendToChat(messageValue)
+      .then(() => {
+        //@ts-ignore
+        message.value = "";
+        message.style.height = "40px";
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
 </script>

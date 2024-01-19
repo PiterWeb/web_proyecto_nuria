@@ -3,33 +3,37 @@ import Button from "../../ui/button.astro";
 
 const { action } = Astro.props;
 
-const actionText = action === "login" ? "Iniciar sesión" : action === "register" ? "Registrarse" : "Enviar";
-
+const actionText =
+  action === "login"
+    ? "Iniciar sesión"
+    : action === "register"
+      ? "Registrarse"
+      : "Enviar";
 ---
 
-<!-- To make this contact form work, create your free access key from https://web3forms.com/
-     Then you will get all form submissions in your email inbox. -->
 <form
   action="https://api.web3forms.com/submit"
   method="POST"
   id="form"
   class="needs-validation"
   novalidate>
-  <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
-  <!-- Create your free access key from https://web3forms.com/ -->
   <input type="checkbox" class="hidden" style="display:none" name="botcheck" />
-  <div class="mb-5">
-    <input
-      type="text"
-      placeholder="Nombre de usuario"
-      required
-      class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-      name="username"
-    />
-    <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
-      Por favor ingrese su nombre de usuario.
-    </div>
-  </div>
+  {
+    action === "register" && (
+      <div class="mb-5">
+        <input
+          type="text"
+          placeholder="Nombre de usuario"
+          required
+          class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+          name="username"
+        />
+        <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
+          Por favor ingrese su nombre de usuario.
+        </div>
+      </div>
+    )
+  }
   <div class="mb-5">
     <label for="email_address" class="sr-only">Correo electrónico</label><input
       id="email_address"
@@ -46,15 +50,20 @@ const actionText = action === "login" ? "Iniciar sesión" : action === "register
       Por favor ingrese un correo electrónico válido.
     </div>
   </div>
-  <div class="mb-3">
-    <textarea
-      name="message"
+  <div class="mb-5">
+    <label for="password" class="sr-only">Contraseña</label><input
+      id="password"
+      type="password"
+      placeholder="Contraseña"
+      name="password"
       required
-      placeholder="Your Message"
-      class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none h-36 focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-    ></textarea>
-    <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
-      Please enter your message.
+      class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+    />
+    <div class="empty-feedback text-red-400 text-sm mt-1">
+      Por favor ingrese una contraseña.
+    </div>
+    <div class="invalid-feedback text-red-400 text-sm mt-1">
+      Por favor ingrese una contraseña válida.
     </div>
   </div>
   <Button type="submit" size="lg" block>{actionText}</Button>
@@ -81,52 +90,98 @@ const actionText = action === "login" ? "Iniciar sesión" : action === "register
   }
 </style>
 
-<script is:inline>
+<script>
+  import { login, createAccount } from "@utils/appwrite";
+
   const form = document.getElementById("form");
   const result = document.getElementById("result");
 
-  form.addEventListener("submit", function (e) {
+  form?.addEventListener("submit", function (e) {
     e.preventDefault();
     form.classList.add("was-validated");
+    //@ts-ignore
     if (!form.checkValidity()) {
+      //@ts-ignore
       form.querySelectorAll(":invalid")[0].focus();
       return;
     }
+
+    //@ts-ignore
     const formData = new FormData(form);
     const object = Object.fromEntries(formData);
-    const json = JSON.stringify(object);
 
-    result.innerHTML = "Sending...";
+    if (!result) return;
 
-    fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: json,
-    })
-      .then(async (response) => {
-        let json = await response.json();
-        if (response.status == 200) {
-          result.classList.add("text-green-500");
-          result.innerHTML = json.message;
-        } else {
-          console.log(response);
-          result.classList.add("text-red-500");
-          result.innerHTML = json.message;
-        }
+    result.innerHTML = `Redirecting...`;
+
+    const { password, email, username } = object;
+
+    console.log(username);
+
+    const action = !username ? "login" : "register";
+
+    const process =
+      action === "login"
+        ? login(email, password)
+        : createAccount(email, password, username);
+
+    process
+      .then(() => {
+        result?.classList.add("text-green-500");
       })
       .catch((error) => {
         console.log(error);
-        result.innerHTML = "Something went wrong!";
+
+        result.innerHTML = "Ha ocurrido un error inesperado!";
       })
-      .then(function () {
+      .then(() => {
+        //@ts-ignore
         form.reset();
         form.classList.remove("was-validated");
         setTimeout(() => {
           result.style.display = "none";
         }, 5000);
+      })
+      .then(() => {
+        if (action === "login") {
+          return window.location.href = "/espacio-personal";
+        }
+
+        login(email, password).then(() => {
+          window.location.href = "/espacio-personal";
+        });
+
       });
+
+    // fetch("https://api.web3forms.com/submit", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Accept: "application/json",
+    //   },
+    //   body: json,
+    // })
+    //   .then(async (response) => {
+    //     let json = await response.json();
+    //     if (response.status == 200) {
+    //       result.classList.add("text-green-500");
+    //       result.innerHTML = json.message;
+    //     } else {
+    //       console.log(response);
+    //       result.classList.add("text-red-500");
+    //       result.innerHTML = json.message;
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     result.innerHTML = "Something went wrong!";
+    //   })
+    //   .then(function () {
+    //     form.reset();
+    //     form.classList.remove("was-validated");
+    //     setTimeout(() => {
+    //       result.style.display = "none";
+    //     }, 5000);
+    //   });
   });
 </script>
