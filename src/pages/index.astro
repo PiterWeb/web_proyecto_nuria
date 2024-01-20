@@ -7,6 +7,7 @@ import Layout from "@layouts/Layout.astro";
 import Videos from "@components/custom/video/videos.astro";
 ---
 
+
 <Layout title="">
   <Container>
     <Hero />
@@ -15,3 +16,9 @@ import Videos from "@components/custom/video/videos.astro";
     <Cta />
   </Container>
 </Layout>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
