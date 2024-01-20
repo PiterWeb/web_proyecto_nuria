@@ -71,17 +71,19 @@ const menuitems = [
       for (const authEl of authElements) {
         authEl.innerHTML = `
       <span class="text-gray-600">Hola, ${session.name}</span>
-      <button id="logout" class="border border-solid lg:p-4 p-2">
+      <button class="logout border border-solid lg:p-4 p-2">
           Cerrar sesión
         </button>
     `;
       }
 
-      const logoutButton = document.getElementById("logout");
+      const logoutButtons = document.querySelectorAll(".logout");
 
-      logoutButton?.addEventListener("click", () => {
-        console.log("logout");
-        logout().then(() => window.location.reload());
+      logoutButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          console.log("logout");
+          logout().then(() => window.location.reload());
+        });
       });
     })
     .catch((error) => {

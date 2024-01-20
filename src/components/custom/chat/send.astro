@@ -1,5 +1,6 @@
 <!-- Create a modern text area with a send button to post a message (tailwind)  -->
 <div
+  id="send-box"
   class="flex flex-row items-center w-full h-16 px-5 py-2 bg-white border-t border-gray-200">
   <div class="flex-grow ml-4">
     <div class="flex flex-col md:flex-row gap-2 w-full">
@@ -20,7 +21,20 @@
 </div>
 
 <script>
+  import { getActiveSession } from "@utils/appwrite";
   import { sendToChat } from "@utils/appwrite";
+
+  const sendBox = document.getElementById("send-box");
+
+  getActiveSession()
+    .then((session) => {})
+    .catch((err) => {
+      if (sendBox) {
+        sendBox.innerHTML = `
+      <p class="p-4 w-full text-xl text-center"> Inicia sesión para poder publicar </p> 
+      `;
+      }
+    });
 
   const message = document.getElementById("message");
 
@@ -41,7 +55,6 @@
 
   sendButton?.addEventListener("click", () => {
     if (!message) return;
-
     // @ts-ignore
     const messageValue = message.value;
 

@@ -2,7 +2,7 @@
 import { Picture } from "astro:assets";
 import heroImage from "assets/hero-body.png";
 import Link from "@components/ui/link.astro";
-import { Icon } from "astro-icon";
+
 ---
 
 <main
@@ -25,7 +25,7 @@ import { Icon } from "astro-icon";
       Web para aprender en profundidad sobre la psicología y la nutrición. Ve
       videos, lee artículos y desaoga tus sentimientos sobre estos temas.
     </p>
-    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+    <div id="auth" class="invisible mt-6 flex flex-col sm:flex-row gap-3">
 
       <Link
         size="lg"
@@ -47,3 +47,16 @@ import { Icon } from "astro-icon";
     </div>
   </div>
 </main>
+
+<script>
+
+import { getActiveSession } from "@utils/appwrite";
+
+  const auth = document.getElementById("auth");
+
+  getActiveSession().then((session) => {
+  }).catch((error) => {
+    auth?.classList.remove("invisible");
+  });
+
+</script>
