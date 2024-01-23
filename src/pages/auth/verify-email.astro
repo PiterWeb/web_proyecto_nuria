@@ -1,0 +1,47 @@
+---
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Layout from "@layouts/Layout.astro";
+---
+
+<Layout title="Contact">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Verificación de email</Fragment>
+      <Fragment slot="desc">
+        Espere unos segundos a que se complete la Verificación
+      </Fragment>
+    </Sectionhead>
+
+    <div class="grid md:grid-cols-1 mx-auto max-w-lg mt-16">
+      <div>
+        <h3 id="output" class="text-xl text-center"></h3>
+      </div>
+    </div>
+  </Container>
+</Layout>
+
+<script>
+  import { verifyEmail } from "@utils/appwrite";
+
+  const output = document.getElementById("output");
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const secret = urlParams.get("secret");
+  const userId = urlParams.get("userId");
+
+  verifyEmail(secret, userId)
+    .then((res) => {
+      if (!output) return;
+      output.innerHTML = "Email verificado correctamente";
+      output.classList.add("text-green-500");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    })
+    .catch((err) => {
+      if (!output) return;
+      output.innerHTML = "Error al verificar el email";
+      output.classList.add("text-red-500");
+    });
+</script>

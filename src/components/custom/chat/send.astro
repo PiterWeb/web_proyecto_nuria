@@ -27,7 +27,13 @@
   const sendBox = document.getElementById("send-box");
 
   getActiveSession()
-    .then((session) => {})
+    .then((session) => {
+      if (!session.emailVerification && sendBox) {
+        sendBox.innerHTML = `
+      <p class="p-4 w-full text-xl text-center"> Verifica tu correo para poder publicar </p>
+      `;
+      }
+    })
     .catch((err) => {
       if (sendBox) {
         sendBox.innerHTML = `
@@ -68,6 +74,11 @@
         window.location.reload();
       })
       .catch((err) => {
+        if (err === "Email not verified" && sendBox) {
+          sendBox.innerHTML = `
+          <p class="p-4 w-full text-xl text-center"> Verifica tu correo para poder publicar </p> 
+          `;
+        }
         console.error(err);
       });
   });

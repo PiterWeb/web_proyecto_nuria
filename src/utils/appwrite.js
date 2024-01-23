@@ -8,15 +8,19 @@ const databases = new Databases(client);
 const account = new Account(client);
 
 export async function sendToChat(message) {
-
   const user = await account.get();
 
-  // if (!user.emailVerification) return
+  if (!user.emailVerification) throw new Error("Email not verified");
 
-  return databases.createDocument("chat", "messages", ID.unique(), {
-    text: message,
-    username: user.name,
-  });
+  return databases.createDocument(
+    "chat",
+    "messages",
+    ID.unique(),
+    {
+      text: message,
+      username: user.name,
+    },
+  );
 }
 
 export function getChat() {
@@ -40,8 +44,13 @@ export function getVideos() {
   ]);
 }
 
-export function createAccount(email, password, name) {
-  return account.create(name, email, password, name);
+export async function createAccount(email, password, name) {
+  try {
+    await account.create(name, email, password, name);
+    sendVerificationEmail();
+  } catch (error) {
+    throw error;
+  }
 }
 
 export function login(email, password) {
@@ -53,5 +62,15 @@ export function logout() {
 }
 
 export function getActiveSession() {
-  return account.get()
+  return account.get();
+}
+
+function sendVerificationEmail() {
+  return account.createVerification(
+    "https://psiconutricion.com/auth/verify-email"
+  );
+}
+
+export function verifyEmail(userId, secret) {
+  return account.updateVerification(userId, secret);
 }
