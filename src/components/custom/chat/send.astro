@@ -31,7 +31,7 @@
       .then((session) => {
         if (!session.emailVerification && sendBox) {
           sendBox.innerHTML = `
-      <p class="p-4 w-full text-xl text-center"> Verifica tu correo para poder publicar </p>
+      <p class="p-4 w-full text-xl text-center dark:text-dark-primary"> Verifica tu correo para poder publicar </p>
       `;
           return;
         }
@@ -41,7 +41,7 @@
       .catch((err) => {
         if (sendBox) {
           sendBox.innerHTML = `
-      <p class="p-4 w-full text-xl text-center"> Inicia sesión para poder publicar </p> 
+      <p class="p-4 w-full text-xl text-center dark:text-dark-primary"> Inicia sesión para poder publicar </p> 
       `;
         }
       });
@@ -80,7 +80,7 @@
         .catch((err) => {
           if (err === "Email not verified" && sendBox) {
             sendBox.innerHTML = `
-          <p class="p-4 w-full text-xl text-center"> Verifica tu correo para poder publicar </p> 
+          <p class="p-4 w-full text-xl text-center dark:text-dark-primary"> Verifica tu correo para poder publicar </p> 
           `;
           }
           console.error(err);
