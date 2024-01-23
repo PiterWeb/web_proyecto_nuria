@@ -18,10 +18,10 @@ import Link from "@components/ui/link.astro";
   </div>
   <div>
     <h1
-      class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">
+      class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter dark:text-dark-primary">
       Psicología y Nutrición
     </h1>
-    <p class="text-lg mt-4 text-slate-600 max-w-xl">
+    <p class="text-lg mt-4 text-slate-600 max-w-xl dark:text-dark-secondary">
       Web para aprender en profundidad sobre la psicología y la nutrición. Ve
       videos, lee artículos y desahoga tus sentimientos sobre estos temas.
     </p>
@@ -32,7 +32,7 @@ import Link from "@components/ui/link.astro";
         href="/auth/login"
         style="outline"
         block
-        class="flex gap-1 items-center justify-center">
+        class="flex gap-1 items-center justify-center dark:bg-dark-bg dark:border-dark-secondary dark:text-dark-primary">
 
         Inicia sesión
       </Link>
@@ -54,8 +54,7 @@ import { getActiveSession } from "@utils/appwrite";
 
   const auth = document.getElementById("auth");
 
-  getActiveSession().then((session) => {
-  }).catch((error) => {
+  getActiveSession().catch((_) => {
     auth?.classList.remove("invisible");
   });
 

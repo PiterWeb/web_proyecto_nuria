@@ -4,7 +4,6 @@ import Layout from "@layouts/Layout.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Send from "@components/custom/chat/send.astro";
 import ChatHandler from "@components/custom/chat/chathandler.svelte";
-
 ---
 
 <Layout title="Espacio Personal">
@@ -12,10 +11,8 @@ import ChatHandler from "@components/custom/chat/chathandler.svelte";
     <Sectionhead>
       <Fragment slot="title">Espacio Personal</Fragment>
       <Fragment slot="desc">
-        <p>
-          Este es un lugar donde te puedes desahogar sobre los problemas que no
-          te dejan dormir
-        </p>
+        Este es un lugar donde te puedes desahogar sobre los problemas que no te
+        dejan dormir
       </Fragment>
     </Sectionhead>
     <main class="mt-16">
@@ -23,7 +20,6 @@ import ChatHandler from "@components/custom/chat/chathandler.svelte";
         <Send />
 
         <ChatHandler client:load />
-
       </div>
     </main>
   </Container>
