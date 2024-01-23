@@ -24,62 +24,67 @@
   import { getActiveSession } from "@utils/appwrite";
   import { sendToChat } from "@utils/appwrite";
 
-  const sendBox = document.getElementById("send-box");
+  document.addEventListener("astro:page-load", () => {
+    const sendBox = document.getElementById("send-box");
 
-  getActiveSession()
-    .then((session) => {
-      if (!session.emailVerification && sendBox) {
-        sendBox.innerHTML = `
+    getActiveSession()
+      .then((session) => {
+        if (!session.emailVerification && sendBox) {
+          sendBox.innerHTML = `
       <p class="p-4 w-full text-xl text-center"> Verifica tu correo para poder publicar </p>
       `;
-      }
-    })
-    .catch((err) => {
-      if (sendBox) {
-        sendBox.innerHTML = `
-      <p class="p-4 w-full text-xl text-center"> Inicia sesión para poder publicar </p> 
-      `;
-      }
-    });
+          return;
+        }
 
-  const message = document.getElementById("message");
-
-  message?.addEventListener("keyup", textAreaAdjust);
-
-  function textAreaAdjust(_) {
-    if (!message) return;
-
-    if (25 + message.scrollHeight >= 120) {
-      return;
-    }
-
-    message.style.height = "1px";
-    message.style.height = 25 + message.scrollHeight + "px";
-  }
-
-  const sendButton = document.getElementById("send");
-
-  sendButton?.addEventListener("click", () => {
-    if (!message) return;
-    // @ts-ignore
-    const messageValue = message.value;
-
-    if (messageValue.trim() === "") return;
-
-    sendToChat(messageValue)
-      .then(() => {
-        //@ts-ignore
-        message.value = "";
-        message.style.height = "40px";
-        window.location.reload();
+        if (!session) throw new Error("No session");
       })
       .catch((err) => {
-        if (err === "Email not verified" && sendBox) {
+        if (sendBox) {
           sendBox.innerHTML = `
+      <p class="p-4 w-full text-xl text-center"> Inicia sesión para poder publicar </p> 
+      `;
+        }
+      });
+
+    const message = document.getElementById("message");
+
+    message?.addEventListener("keyup", textAreaAdjust);
+
+    function textAreaAdjust(_) {
+      if (!message) return;
+
+      if (25 + message.scrollHeight >= 120) {
+        return;
+      }
+
+      message.style.height = "1px";
+      message.style.height = 25 + message.scrollHeight + "px";
+    }
+
+    const sendButton = document.getElementById("send");
+
+    sendButton?.addEventListener("click", () => {
+      if (!message) return;
+      // @ts-ignore
+      const messageValue = message.value;
+
+      if (messageValue.trim() === "") return;
+
+      sendToChat(messageValue)
+        .then(() => {
+          //@ts-ignore
+          message.value = "";
+          message.style.height = "40px";
+          window.location.reload();
+        })
+        .catch((err) => {
+          if (err === "Email not verified" && sendBox) {
+            sendBox.innerHTML = `
           <p class="p-4 w-full text-xl text-center"> Verifica tu correo para poder publicar </p> 
           `;
-        }
-        console.error(err);
-      });
+          }
+          console.error(err);
+        });
+    });
   });
 </script>
