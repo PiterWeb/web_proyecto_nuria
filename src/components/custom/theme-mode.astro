@@ -59,7 +59,7 @@
 
   toggle?.addEventListener("click", toggleTheme);
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const currentTheme = localStorage.getItem("theme");
     if (currentTheme === "dark") {
       html?.classList.add("dark");
