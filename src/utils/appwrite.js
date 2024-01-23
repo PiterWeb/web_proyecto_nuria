@@ -67,7 +67,7 @@ export function getActiveSession() {
 
 function sendVerificationEmail() {
   return account.createVerification(
-    "https://psiconutricion.com/auth/verify-email"
+    "https://psiconutricion.vercel.app/auth/verify-email"
   );
 }
 
