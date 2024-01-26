@@ -12,8 +12,6 @@ const actionText =
 ---
 
 <form
-  action="https://api.web3forms.com/submit"
-  method="POST"
   id="form"
   class="needs-validation"
   novalidate>
@@ -115,8 +113,6 @@ const actionText =
     result.innerHTML = `Redirecting...`;
 
     const { password, email, username } = object;
-
-    console.log(username);
 
     const action = !username ? "login" : "register";
 

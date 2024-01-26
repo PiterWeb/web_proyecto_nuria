@@ -12,15 +12,10 @@ export async function sendToChat(message) {
 
   if (!user.emailVerification) throw new Error("Email not verified");
 
-  return databases.createDocument(
-    "chat",
-    "messages",
-    ID.unique(),
-    {
-      text: message,
-      username: user.name,
-    },
-  );
+  return databases.createDocument("chat", "messages", ID.unique(), {
+    text: message,
+    username: user.name,
+  });
 }
 
 export function getChat() {
@@ -47,8 +42,9 @@ export function getVideos() {
 export async function createAccount(email, password, name) {
   try {
     await account.create(name, email, password, name);
-    sendVerificationEmail();
+    await sendVerificationEmail();
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
@@ -66,9 +62,9 @@ export function getActiveSession() {
 }
 
 function sendVerificationEmail() {
-  return account.createVerification(
-    "https://psiconutricion.vercel.app/auth/verify-email"
-  );
+  const url = "https://psiconutricion.vercel.app/auth/verify-email";
+
+  return account.createVerification(url);
 }
 
 export function verifyEmail(userId, secret) {
