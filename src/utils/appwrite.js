@@ -42,15 +42,21 @@ export function getVideos() {
 export async function createAccount(email, password, name) {
   try {
     await account.create(name, email, password, name);
-    await sendVerificationEmail();
+    await login(email, password);
   } catch (error) {
     console.log(error);
     throw error;
   }
 }
 
-export function login(email, password) {
-  return account.createEmailSession(email, password);
+export async function login(email, password) {
+
+  
+  const user = await account.createEmailSession(email, password);
+
+  if (!(await getActiveSession()).emailVerification) await sendVerificationEmail();
+
+  return user;
 }
 
 export function logout() {
